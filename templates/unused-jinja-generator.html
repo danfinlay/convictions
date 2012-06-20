@@ -1,0 +1,22 @@
+{% for reason in conviction.reasons %}
+
+<div class = "reason box {{{reason.boxType}}}">
+	<span class = voteBox>
+		<img src = "button-images/upgrey.png"/><br>
+		<img src = "button-images/downgrey.png"/>
+	</span>
+	<p>{{{reason.text}}}
+	<div class = "more button">
+	</div>
+	<div class = "evidence button">
+		<span class = "numberCircle">{{{reason.evidence}}}</span>
+	</div>
+	<div class = "object button">
+		<span class = "numberCircle">{{{reason.objections}}}</span>
+	</div>	
+	<div class = "support button">
+		<span class = "numberCircle">{{{reason.support}}}</span>
+	</div>
+</div>
+
+{% endfor %}

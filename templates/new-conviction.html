@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
+	<script type = "text/javascript" src="/scripts/newsrc.js"></script>
+	<title>Conviction</title>
+
+<span class = "regBar">
+	<span class = "regLink">Login</span>
+	<span class = "regLink">Register</span>
+</span>
+<div style = 'position:absolute; visibility:hidden' class = "postid">{{id}}</div>
+<div style = 'position:absolute; visibility:hidden' class = "postid"><center>{{conviction}}</center></div>
+<center><img src="/images/logo3.png"/></center>
+
+<nav>
+<a href = "/">Index</a>
+<a href="/topic/new">New</a>
+</nav>
+</head>
+
+<body>
+<div class = "box">
+<form method = "post">
+Enter a new conviction:
+<textarea name = "text" value = {{text}}></textarea>
+<span style = "error">{{error}}</span><br>
+<input type = "submit">
+
+</form>
+</div>
+</body>
+<script>
+  $(document).ready(readyFunction());
+  </script>
+</html>
