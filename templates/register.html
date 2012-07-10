@@ -1,0 +1,38 @@
+
+<script type = "text/javascript" src="/scripts/registersrc.js"></script>
+<body>
+<div class = "box">
+
+<form method = "post">
+<h2>Sign Up</h2>
+<table>
+<tr>
+<td><label>Username</td>
+<td><input type = "text" name = "username" value = {{username}}></label></td>
+<td><div style = "color: red">{{usererror}}</div></td>
+</tr>
+<tr>
+<td><label>Password</td>
+<td><input type = "password" name = "password" value = {{password}}></label></td>
+<td><div style = "color: red">{{passworderror}}</div></td>
+</tr>
+<tr>
+<td><label>Verify Password</td>
+<td><input type = "password" name = "verify" value = {{verify}}></label></td>
+<td><div style = "color: red">{{verifyerror}}</div></td>
+</tr>
+<tr>
+<td><label>Email (optional)</td>
+<td><input type = "text" name = "email" {{email}}></label></td>
+<td><div style = "color: red">{{emailerror}}</div></td>
+</tr>
+</table>
+<input type = "submit">
+</form>
+
+</div>
+</body>
+<script>
+  $(document).ready(readyFunction());
+  </script>
+</html>

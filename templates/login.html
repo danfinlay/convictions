@@ -1,0 +1,26 @@
+
+	<script type = "text/javascript" src="/scripts/loginsrc.js"></script>
+<body>
+<div class = "box">
+
+<form method = "post">
+<h2>Log in</h2>
+<table>
+<tr>
+<td><label>Username</td><td><input type = "text" name = "username" value = {{username}}></label></td>
+<tr>
+<td><label>Password</td><td><input type = "password" name = "password" value = {{password}}></label></td>
+</tr>
+<tr>
+<td><div style = "error">{{error}}</div></td>
+</tr>
+</table>
+<input type = "submit">
+</form>
+<div class="fb-login-button">
+</div>
+</body>
+<script>
+  $(document).ready(readyFunction());
+  </script>
+</html>

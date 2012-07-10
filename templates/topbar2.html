@@ -1,0 +1,31 @@
+<!doctype html>
+
+<html>
+<head>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript">
+if (typeof jQuery == 'undefined')
+{
+    document.write(unescape("%3Cscript src='/scripts/jquery.min.js' type='text/javascript'%3E%3C/script%3E"));
+}
+</script>
+<script type="text/javascript" src="/scripts/jquery.qtip-1.0.0-rc3.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
+
+<title>Conviction</title>
+
+<span class = "regBar">
+	Welcome, 
+	<span class = "regLink name"><a href="/login">Your Name!</a></span>
+	<span class = "regLink"><a href="/logout">Log Out</a></span>
+</span>
+<div style = 'position:absolute; visibility:hidden' class = "postid">{{id}}</div>
+<div style = 'position:absolute; visibility:hidden' class = "postid"><center>{{conviction}}</center></div>
+<center><img src="/images/logo4.png"/></center>
+
+<nav>
+<a href = "/">Index</a>
+<a href="/topic/new">New</a>
+</nav>

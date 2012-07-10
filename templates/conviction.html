@@ -1,27 +1,7 @@
-<!doctype html>
 
-<html>
-<head>
-
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script type="text/javascript" src="/scripts/jquery.qtip-1.0.0-rc3.min.js"></script>
+<script type = "text/javascript" src="/scripts/functions.js"></script>
 <script type = "text/javascript" src="/scripts/src.js"></script>
-<link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
 
-<title>Conviction</title>
-
-<span class = "regBar">
-	<span class = "regLink">Login</span>
-	<span class = "regLink">Register</span>
-</span>
-<div style = 'position:absolute; visibility:hidden' class = "postid">{{id}}</div>
-<div style = 'position:absolute; visibility:hidden' class = "postid"><center>{{conviction}}</center></div>
-<center><img src="/images/logo3.png"/></center>
-
-<nav>
-<a href = "/">Index</a>
-<a href="/topic/new">New</a>
-</nav>
 
 <div class = "topic box" conviction-data = "{{id}}">
 
@@ -74,48 +54,11 @@ Reasons Sorted By
 
 
 
-{% for reason in reasons %}
-<div class = "{{reason.type}}Box reason box"; id-data= {{reason.id}}>
 
-	<div class = voteButton><img src="/images/finger-icon-grey.png"/></div>
-
-	<p>{{reason.text}}
-	<div class ="more button" id-data= {{reason.id}}>
-		<img src = "/images/more.gif"/>
-	</div>
-	<div class = "evidence button"; id-data= {{reason.id}}>
-		<img src = "/images/citation.png"/>
-		<span class = "numberCircle">{{reason.evidence_count}}</span>
-	</div>
-	<div class = "object button"; id-data= {{reason.id}}>
-		<img src = "/images/objection.png"/>
-		<span class = "numberCircle">{{reason.objection_count}}</span>
-	</div>	
-	<div class = "support button"; id-data= {{reason.id}}>
-		<img src = "/images/support.png"/>
-		<span class = "numberCircle">{{reason.support_count}}</span>
-	</div>
-
-<div class = "reply">
-	<select class = "newReasonType">
-		<option>Support</option>
-		<option>Objection</option>
-		<option>Evidence</option>
-	</select>
-	<form method = "post">
-	<textarea name = "supportText"></textarea><br>
-	<input type = "submit">
-	</form>
-</div>
-
-</div>
-{% endfor %}
+</body>
 
 <script>
   $(document).ready(readyFunction());
   </script>
-
-
-</body>
 
 </html>
