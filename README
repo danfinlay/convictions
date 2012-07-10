@@ -1,0 +1,22 @@
+Welcome to Convictions
+
+Convictions aims to create a fun and user friendly e-governance platform.  Aiming for low barriers to entry, the general design is intended to make exploring complex issues a pleasant, and social experience.
+
+Right now, the latest built version can be found at: 
+my-convictions.appspot.com
+
+The current version is just a discussion system, and has yet to have user accounts added, which will in turn enable proper voting on points and issues.
+
+A vision of the final version as I recently wrote to my friends at the Sudoroom:
+
+---------------
+
+Users can join "Organizations" on the site, Sudoroom would be one such organization.
+
+Organizations can have a list of "Issues"- problems that need solving.  All members (I'm not addressing membership methods here) can rate issues on a sliding scale from not an issue to the utmost urgency.  Those ratings can then be arranged in a variety of ways, I'd look at all the favorite ranked-choice methods on metagovernment.org as a starting point.
+
+Issues would themselves have a list of "Solutions"- each one has two qualities- first, users can rank these solutions the way they see fit, which are then computed real-time using our ranked-choice algorithm of choice, to display the group's current favored solution.  Secondly, each solution would have a rich discussion engine, as I've begun modeling.
+
+----------------
+
+If you're interested in contributing, by all means, contact me.  The current version is built on Google App Engine with Python, with Jinja2 for templating, but most of the dynamic content being loaded via jQuery AJAX requests.  The current data model is pretty cluttered, and I might migrate even the discussion engine over to Backbone.js soon, as I'm learning it presently.  I'm also curious if the backend couldn't just be replaced with Parse.com's Javascript framework, which has already surprised me with how easy it is to build with.
