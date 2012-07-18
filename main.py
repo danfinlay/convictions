@@ -34,8 +34,55 @@ error = ''
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape = True)
 
-secret = 'seI44ka5%1~fjarjfkls~UuKLf84$r2rdakbl48'
 
+
+#DATA MODEL CLASSES:
+class Reason(db.Model):
+	created = db.DateTimeProperty(auto_now_add = True)
+	text = db.StringProperty(required = True)
+	is_citation = db.BooleanProperty(required=True)
+	reason_for = db.ReferenceProperty(collection_name='reasons_for_set')
+	reason_against = db.ReferenceProperty(collection_name='reasons_against_set')
+	citation_for = db.SelfReferenceProperty(collection_name = "citation_set")
+	reasoned = db.ReferenceProperty(collection_name = "reasoned_set")
+
+class Group(db.Model):
+	created = db.DateTimeProperty(auto_now_add = True)
+	title = db.StringProperty(required = True)
+	description = db.StringProperty(required = False)
+	members = db.ReferenceProperty(collection_name = "group_set")
+	problems = db.ReferenceProperty(collection_name = "convicted_set")
+	moderators = db.ReferenceProperty(collection_name = "moderating_set")
+
+class Problem(db.Model):
+	created = db.DateTimeProperty(auto_now_add = True)
+	title = db.StringProperty(required = True)
+	description = db.StringProperty(required = False)
+	group = db.ReferenceProperty(collection_name = "problem_set")
+	urgency = db.IntegerProperty(required=False)
+
+#Could also be called "Solution"
+class Conviction(db.Model):
+	created = db.DateTimeProperty(auto_now_add = True)
+	text = db.StringProperty(required = True)
+	votes_for = db.IntegerProperty(required = False)
+	votes_against = db.IntegerProperty(required=False)
+	#could be called "Endorsements".  Is used to list public endorsements.
+	convicted = db.ReferenceProperty(collection_name = "convicted_set")
+
+class User(db.Model):
+	name = db.StringProperty(required = True)
+	passwordhash = db.StringProperty(required=True)
+	email = db.StringProperty()
+	problem_list = db.ListProperty()
+	solution_list = db.ListProperty()
+	#facebook id, for facebook-enhanced features.
+	fbid = db.StringProperty(required=False)
+
+
+
+
+#JSON GENERATING CLASSES
 def to_dict(model):
     output = {}
 
@@ -55,38 +102,7 @@ def to_dict(model):
             output[key] = to_dict(value)
         else:
             raise ValueError('cannot encode ' + repr(prop))
-
     return output
-
-def make_secure_val(val):
-	return '%s|%s' % (val, hashlib.sha256(secret + str(val)).hexdigest())
-
-def check_secure_val(secure_val):
-	logging.error("Checking secure value of \n" + secure_val)
-	val = secure_val.split('|')[0]
-	logging.error("Comparing it to \n" + make_secure_val(val))
-	if secure_val == make_secure_val(val):
-		logging.error("Value found to be secure.")
-		return val
-
-def id_from_hash(secure_val):
-	val = secure_val.split('|')[0]
-	return val
-
-def make_salt():
-    return ''.join(random.choice(string.letters) for x in xrange(5))
-
-def make_pw_hash(name, pw, salt=None):
-	if not salt:
-		salt = make_salt()
-	h = hashlib.sha256(name + pw + salt).hexdigest()
-	return '%s,%s' % (salt, h)
-
-def valid_pw(name, pw, h):
-    salt = h.split(',')[0]
-    return h == make_pw_hash(name, pw, salt)
-
-
 
 def build_topic_dict_from_conviction(conviction):
 	result = {}
@@ -150,27 +166,45 @@ def json_from_reason_dict(conviction_dict):
 	logging.error("Json : " + load_conviction)
 	return load_conviction
 
-class Reason(db.Model):
-	created = db.DateTimeProperty(auto_now_add = True)
-	text = db.StringProperty(required = True)
-	is_citation = db.BooleanProperty(required=True)
-	reason_for = db.ReferenceProperty(collection_name='reasons_for_set')
-	reason_against = db.ReferenceProperty(collection_name='reasons_against_set')
-	citation_for = db.SelfReferenceProperty(collection_name = "citation_set")
-	reasoned = db.ReferenceProperty(collection_name = "reasoned_set")
 
-class Conviction(db.Model):
-	created = db.DateTimeProperty(auto_now_add = True)
-	text = db.StringProperty(required = True)
-	votes_for = db.IntegerProperty(required = False)
-	votes_against = db.IntegerProperty(required=False)
-	convicted = db.ReferenceProperty(collection_name = "convicted_set")
 
-class User(db.Model):
-	name = db.StringProperty(required = True)
-	passwordhash = db.StringProperty(required=True)
-	email = db.StringProperty()
 
+#SITE SECURITY METHODS
+secret = 'seI44ka5%1~fjarjfkls~UuKLf84$r2rdakbl48'
+
+def make_secure_val(val):
+	return '%s|%s' % (val, hashlib.sha256(secret + str(val)).hexdigest())
+
+def check_secure_val(secure_val):
+	logging.error("Checking secure value of \n" + secure_val)
+	val = secure_val.split('|')[0]
+	logging.error("Comparing it to \n" + make_secure_val(val))
+	if secure_val == make_secure_val(val):
+		logging.error("Value found to be secure.")
+		return val
+
+def id_from_hash(secure_val):
+	val = secure_val.split('|')[0]
+	return val
+
+def make_salt():
+    return ''.join(random.choice(string.letters) for x in xrange(5))
+
+def make_pw_hash(name, pw, salt=None):
+	if not salt:
+		salt = make_salt()
+	h = hashlib.sha256(name + pw + salt).hexdigest()
+	return '%s,%s' % (salt, h)
+
+def valid_pw(name, pw, h):
+    salt = h.split(',')[0]
+    return h == make_pw_hash(name, pw, salt)
+
+
+
+
+
+#HANDLER CLASSES
 class Handler (webapp2.RequestHandler):
 	def write(self, *a, **kw):
 		self.response.out.write(*a, **kw)
@@ -207,6 +241,7 @@ class MainHandler(Handler):
 		topics = db.GqlQuery("Select * from Conviction order by created desc")
 		self.render_front(topics)
 
+
 class NewConvictionHandler(Handler):
 	def render_front(self, text = '', error = ''):
 		self.render("new-conviction.html", text = text, error = error)
@@ -241,6 +276,7 @@ def json_from_set(set):
 	conviction_dict["reasons_for"] = reasons_for
 	conviction_dict["reasons_against"] = reasons_against
 	return json.dumps(conviction_dict)
+
 
 class ConvictionHandler(Handler):
 
@@ -340,9 +376,6 @@ class ConvictionHandler(Handler):
 					r = Reason(text = self.request.get("objectText"), is_citation = False, reason_against=c)
 				r.put()
 				logging.error("Posted reason.")
-
-
-
 
 
 class ConvictionJSONHandler(Handler):
